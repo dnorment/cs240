@@ -22,21 +22,37 @@ public class Node<T>
         next = nextNode;
     }
     
+    /**
+     * Returns the data in the node.
+     * @return  The data contained in the node.
+     */
     public T getData()
     {
         return data;
     }
     
+    /**
+     * Returns the node referenced by this node.
+     * @return  The Node object referenced by this node.
+     */
     public Node<T> getNext()
     {
         return next;
     }
     
+    /**
+     * Sets the data in the node.
+     * @param info  The data to be set.
+     */
     public void setData(T info)
     {
         data = info;
     }
     
+    /**
+     * Sets the next node in the link.
+     * @param nextNode  The next node to be referenced.
+     */
     public void setNext(Node<T> nextNode)
     {
         next = nextNode;
