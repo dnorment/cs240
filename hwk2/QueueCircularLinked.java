@@ -8,6 +8,7 @@
 public class QueueCircularLinked<T> implements QueueInterface<T>
 {
     private final static int QUEUE_SIZE = 10;
+    private int numOfNodes; //not counting the free node
     private Node<T> free; //last empty node in the queue
     private Node<T> back; //last node in the queue with an item inside
     
@@ -15,6 +16,7 @@ public class QueueCircularLinked<T> implements QueueInterface<T>
     {
         Node<T> emptyNode = new Node<T>();
         emptyNode.setNext(emptyNode);
+        numOfNodes = 0;
         free = emptyNode;
         back = null;
     }
@@ -22,21 +24,31 @@ public class QueueCircularLinked<T> implements QueueInterface<T>
     /** 
      * Adds a new entry to the back of this queue.
      * @param newEntry  An object to be added. 
+     * @throws  FullQueueException if number of nodes is more than QUEUE_SIZE
      */
-    public void enqueue(T newEntry)
+    public void enqueue(T newEntry) throws FullQueueException
     {
-       if (isEmpty())
+       if (numOfNodes >= QUEUE_SIZE)
        {
-           Node<T> newNode = new Node<T>(newEntry, free);
-           back = newNode;
-           free.setNext(back);
+           throw new FullQueueException();
        }
        else
        {
+           if (isEmpty())
+           {
+           Node<T> newNode = new Node<T>(newEntry, free);
+           back = newNode;
+           free.setNext(back);
+           }
+           else
+           {
            Node<T> newNode = new Node<T>(newEntry, back);
            back = newNode;
            free.setNext(back);
+           }
+           numOfNodes++;
        }
+       
     }
     
     /**
