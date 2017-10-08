@@ -46,7 +46,7 @@ public class QueueFixedArray<T> implements QueueInterface<T>
     {
         if (isEmpty())
         {
-            throw new EmptyStackException();
+            throw new EmptyQueueException();
         }
         else
         {
@@ -67,7 +67,7 @@ public class QueueFixedArray<T> implements QueueInterface<T>
     {
         if (isEmpty())
         {
-            throw new EmptyStackException();
+            throw new EmptyQueueException();
         }
         else
         {
