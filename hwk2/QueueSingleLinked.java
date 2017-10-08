@@ -7,8 +7,8 @@
  */
 public class QueueSingleLinked<T> implements QueueInterface<T>
 {
-    Node<T> front; //first item in queue
-    Node<T> back; //last item in queue
+    private Node<T> front; //first item in queue
+    private Node<T> back; //last item in queue
     
     public QueueSingleLinked()
     {
