@@ -27,11 +27,19 @@ public class StackFixedArray<T> implements StackInterface<T>
     /**
      * Adds a new entry to the top of this stack.
      * @param newEntry  An object to be added to the stack.
+     * @throws FullStackException if the stack is full.
      */
-    public void push(T newEntry)
+    public void push(T newEntry) throws FullStackException
     {
-        stack[numOfEntries] = newEntry;
-        numOfEntries++;
+        if (numOfEntries >= stack.length)
+        {
+            throw new FullStackException();
+        }
+        else
+        {
+            stack[numOfEntries] = newEntry;
+            numOfEntries++;
+        }
     }
     
     /**
