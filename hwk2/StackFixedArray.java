@@ -89,5 +89,6 @@ public class StackFixedArray<T> implements StackInterface<T>
         {
             stack[i] = null;
         }
+        numOfEntries = 0;
     }
 }
