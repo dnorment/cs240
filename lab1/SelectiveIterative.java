@@ -4,6 +4,7 @@ import java.util.Random;
  * An iterative implementation of the selective sort algorithm.
  *
  * @author Daniel J. Norment
+ * @version 1.0
  */
 public class SelectiveIterative
 {

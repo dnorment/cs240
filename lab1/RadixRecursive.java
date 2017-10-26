@@ -2,27 +2,27 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * An iterative implementation of the radix sort algorithm.
+ * A recursive implementation of the radix sort algorithm.
  *
  * @author Daniel J. Norment
  * @version 1.0
  */
-public class RadixIterative
+public class RadixRecursive
 {
-    public static void sort(int[] array)
+    public static void sort(int[] array, int place)
     {
-        final int ARRAY_SIZE = 10;
-        @SuppressWarnings("unchecked")
-        ArrayList<Integer>[] bucket = (ArrayList<Integer>[])new ArrayList[ARRAY_SIZE];
-        for (int i=0; i<bucket.length; i++)
+        if (place <= 1000)
         {
-            bucket[i] = new ArrayList<Integer>(ARRAY_SIZE);
-        }
-        for (int pow=1; pow<1000; pow*=10)
-        {
+            final int ARRAY_SIZE = 10;
+            @SuppressWarnings("unchecked")
+            ArrayList<Integer>[] bucket = (ArrayList<Integer>[])new ArrayList[ARRAY_SIZE];
+            for (int i=0; i<bucket.length; i++)
+            {
+                bucket[i] = new ArrayList<Integer>(ARRAY_SIZE);
+            }
             for (int i=0; i<array.length; i++)
             {
-                bucket[array[i]/pow % 10].add(array[i]);
+                bucket[array[i]/place % 10].add(array[i]);
             }
             int next = 0;
             for (int i=0; i<array.length; i++)
@@ -34,6 +34,7 @@ public class RadixIterative
                 }
                 bucket[i].clear();
             }
+            sort(array, place*=10);
         }
     }
     
@@ -52,7 +53,7 @@ public class RadixIterative
         {
             System.out.print(x + " ");
         }
-        RadixIterative.sort(sortArray);
+        RadixRecursive.sort(sortArray, 1);
         System.out.println();
         for (int x : sortArray)
         {

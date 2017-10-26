@@ -4,6 +4,7 @@ import java.util.Random;
  * A recursive implementation of the insertion sort algorithm.
  *
  * @author Daniel J. Norment
+ * @version 1.0
  */
 public class InsertionRecursive
 {
