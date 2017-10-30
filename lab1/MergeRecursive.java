@@ -4,7 +4,7 @@ import java.util.Random;
  * A recursive implementation of the merge sort algorithm.
  *
  * @author Daniel J. Norment
- * @version 1.0
+ * @version 1.1
  */
 public class MergeRecursive
 {
@@ -40,28 +40,21 @@ public class MergeRecursive
         {
             if (leftArray[i] < rightArray[j])
             {
-                array[k] = leftArray[i]; //insert item from left array
-                i++;
+                array[k++] = leftArray[i++]; //insert item from left array
             }
             else
             {
-                array[k] = rightArray[j]; //insert item from right array
-                j++;
+                array[k++] = rightArray[j++]; //insert item from right array
             }
-            k++;
         }
         //will only exit above loop if one array inserts all of its elements, so add rest of other array
         while (i < leftArray.length) //insert remaining of left array
         {
-            array[k] = leftArray[i];
-            i++;
-            k++;
+            array[k++] = leftArray[i++];
         }
         while (j < rightArray.length) //insert remaining of right array
         {
-            array[k] = rightArray[j];
-            j++;
-            k++;
+            array[k++] = rightArray[j++];
         }
     }
     
