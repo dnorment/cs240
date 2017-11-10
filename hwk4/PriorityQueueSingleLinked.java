@@ -3,7 +3,7 @@
  * An implementation of the ADT Priority Queue using singly linked data. 
  *
  * @author Daniel J. Norment
- * @version 1.0
+ * @version 1.1
  */
 public class PriorityQueueSingleLinked<T extends Comparable<T>> implements PriorityQueueInterface<T>
 {
@@ -22,10 +22,11 @@ public class PriorityQueueSingleLinked<T extends Comparable<T>> implements Prior
        @param newEntry  An object to be added. */
     public void add(T newEntry)
     {
-       add(newEntry, 0);
+       add(newEntry, 0); //default to priority 0
     }
     
     /** Adds a new entry to this priority queue with a certain priority.
+     * Calls add(int, T) to insert at correct priority's position.
      * @param newEntry  An object to be added.
      * @param pri  The priority of the object to be added (>=0). */
     public void add(T newEntry, int pri)
@@ -36,63 +37,43 @@ public class PriorityQueueSingleLinked<T extends Comparable<T>> implements Prior
            head = newNode;
            tail = newNode;
        }
-       else
+       else if (nodes == 1)
        {
-           SLPNode<T> beforeNode = search(newNode);
-           if (beforeNode.getNext() != null)
+           if (newNode.compareTo(tail) > 0) //newNode more important
            {
-               newNode.setNext(beforeNode.getNext());
-           }
-           
-           if (beforeNode == tail)
-           {
-               if (beforeNode == head)
-               {
-                   if (newNode.compareTo(beforeNode) < 0)
-                   {
-                       newNode.setNext(beforeNode);
-                   }
-                   else
-                   {
-                       beforeNode.setNext(newNode);
-                   }
-               }
-               else
-               {
-                   newNode.setNext(beforeNode);
-                   tail = newNode;
-               }
+               tail.setNext(newNode);
+               head = newNode;
            }
            else
            {
-               beforeNode.setNext(newNode);
+               newNode.setNext(tail);
+               tail = newNode;
            }
-           if (beforeNode == head)
+       }
+       else
+       {
+           SLPNode<T> beforeNode = tail;
+           while (beforeNode.getNext() != null && beforeNode.getNext().compareTo(newNode) < 0)
            {
-              head = newNode;
+               beforeNode = beforeNode.getNext();
+           }
+           if (beforeNode.getNext() == null) //newNode most important
+           {
+               beforeNode.setNext(newNode);
+               head = newNode;
+           }
+           else if (newNode.compareTo(tail) < 0) //newNode least important
+           {
+               newNode.setNext(tail);
+               tail = newNode;
+           }
+           else //goes in middle somewhere
+           {
+               newNode.setNext(beforeNode.getNext());
+               beforeNode.setNext(newNode);
            }
        }
        nodes++;
-    }
-    
-    public SLPNode<T> search(SLPNode<T> newNode)
-    {
-        SLPNode<T> thisNode = tail;
-        SLPNode<T> beforeNode = tail;
-        int zexit = 0;
-        while (newNode.compareTo(thisNode) > 0 && zexit != 1)
-        {
-            beforeNode = thisNode;
-            if (thisNode.getNext() == null)
-            {
-                zexit = 1;
-            }
-            else
-            {
-                thisNode = thisNode.getNext();
-            }
-        }
-        return beforeNode;
     }
 
     /** Removes and returns the entry having the highest priority.
@@ -104,9 +85,25 @@ public class PriorityQueueSingleLinked<T extends Comparable<T>> implements Prior
        {
            return null;
        }
+       else if (nodes == 1)
+       {
+           T temp = head.getData();
+           clear();
+           return temp;
+       }
        else
        {
-           return null;
+           SLPNode<T> beforeNode = tail;
+           while (beforeNode.getNext() != head) //beforeNode -> new head
+           {
+               beforeNode = beforeNode.getNext();
+           }
+           T temp = head.getData();
+           head.setData(null);
+           beforeNode.setNext(null);
+           head = beforeNode;
+           nodes--;
+           return temp;
        }
     }
 
@@ -142,6 +139,23 @@ public class PriorityQueueSingleLinked<T extends Comparable<T>> implements Prior
     /** Removes all entries from this priority queue. */
     public void clear()
     {
-       //
+       if (!isEmpty())
+       {
+           SLPNode<T> lastNode = tail;
+           while (lastNode.getNext() != null)
+           {
+               lastNode.setData(null);
+               lastNode.setPriority(-1);
+               SLPNode<T> nextNode = lastNode.getNext();
+               lastNode.setNext(null);
+               lastNode = nextNode;
+           }
+           head.setData(null);
+           head.setPriority(-1);
+           head.setNext(null);
+           head = null;
+           tail = null;
+           nodes = 0;
+       }
     }
 }
