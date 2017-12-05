@@ -5,7 +5,7 @@ import java.util.Random;
  * Simulates an In-N-Out restaurant for the month of December.
  *
  * @author Daniel J. Norment
- * @version 1.0
+ * @version 1.1
  */
 public class Restaurant
 {
@@ -112,51 +112,75 @@ public class Restaurant
                         
                         for (int j=0; j<menu(order).getLength(); j++) //for each ingredient in menu item
                         {
-                            if (order == 2 && lettuce.getSize() < 2) //menu #3 uses 2 lettuce
-                            {
-                                enoughIngredients = false;
-                                System.out.println("#2 ordered, not enough lettuce");
-                            }
-                            else if (menu(order).view(j).getSize() < 1) //if less than 1 ingredient in food stack, there is not enough
-                            {
-                                enoughIngredients = false;
-                                System.out.printf("#%d ordered, not enough of an ingredient%n", order);
-                            }
+                            enoughIngredients = enoughIngredients && menu(order).view(j).getSize() > 1; //stays true if each food stack has more than 1 item
                         }
-                        
-                        if (!customerQueue.isEmpty() && enoughIngredients)
+                        //TODO only serving a handful of customers each hour
+                        if (!customerQueue.isEmpty())
                         {
-                            for (int j=0; j<menu(order).getLength(); j++) //pop off ingredients needed
+                            int customerNum = customerQueue.dequeue();
+                            if (enoughIngredients)
                             {
-                                menu(order).view(j).pop();
-                            }
-                            switch (order)
+                                for (int j=0; j<menu(order).getLength(); j++) //pop off ingredients needed
+                                {
+                                    menu(order).view(j).pop();
+                                }
+                                switch (order)
+                                {
+                                    case 0: countItemOne++;
+                                        break;
+                                    case 1: countItemTwo++;
+                                        break;
+                                    case 2: countItemThree++;
+                                        break;
+                                    case 3: countItemFour++;
+                                        break;
+                                    case 4: countItemFive++;
+                                        break;
+                                    case 5: countItemSix++;
+                                        break;
+                                }
+                                dict.add(customerNum, order + 1); //add (customerNum, orderNum) to dict
+                            } 
+                            else
                             {
-                                case 0: countItemOne++;
-                                    break;
-                                case 1: countItemTwo++;
-                                    break;
-                                case 2: countItemThree++;
-                                    break;
-                                case 3: countItemFour++;
-                                    break;
-                                case 4: countItemFive++;
-                                    break;
-                                case 5: countItemSix++;
-                                    break;
+                                lostCustomerDay++;
                             }
-                            dict.add(customerQueue.dequeue(), order + 1); //add (customerNum, orderNum) to dict
-                        }
-                        else
-                        {
-                            lostCustomerDay++;
                         }
                     }
                 }
                 else if (hour == 21) //end of day 2100
                 {
                     //sort food items by expiration day (any algorithm) TODO oldest items to top of stack
-                    //pop expired items -> increment waste
+                    while (!bun.isEmpty() && bun.peek() < today) //
+                    {
+                        bun.pop();
+                        wasteBun++;
+                    }
+                    while (!patty.isEmpty() && patty.peek() < today)
+                    {
+                        patty.pop();
+                        wastePatty++;
+                    }
+                    while (!lettuce.isEmpty() && lettuce.peek() < today)
+                    {
+                        lettuce.pop();
+                        wasteLettuce++;
+                    }
+                    while (!tomato.isEmpty() && tomato.peek() < today)
+                    {
+                        tomato.pop();
+                        wasteTomato++;
+                    }
+                    while (!onion.isEmpty() && onion.peek() < today)
+                    {
+                        onion.pop();
+                        wasteOnion++;
+                    }
+                    while (!cheese.isEmpty() && cheese.peek() < today)
+                    {
+                        cheese.pop();
+                        wasteCheese++;
+                    }
                 }
             }
             //end of day
