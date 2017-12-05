@@ -9,16 +9,17 @@ import java.util.Random;
  */
 public class Restaurant
 {
+    //random number generator rng
     private static Random rng = new Random();
     
     //intialize food stacks
-    private static final int STACK_SIZE = 300; //usually only reaches ~150 w/ 1000 item shipment
-    private static StackFixedArray<Integer> bun = new StackFixedArray<Integer>(STACK_SIZE);
-    private static StackFixedArray<Integer> patty = new StackFixedArray<Integer>(STACK_SIZE);
-    private static StackFixedArray<Integer> lettuce = new StackFixedArray<Integer>(STACK_SIZE);
-    private static StackFixedArray<Integer> tomato = new StackFixedArray<Integer>(STACK_SIZE);
-    private static StackFixedArray<Integer> onion = new StackFixedArray<Integer>(STACK_SIZE);
-    private static StackFixedArray<Integer> cheese = new StackFixedArray<Integer>(STACK_SIZE);
+    private static final int SHIPMENT_SIZE = 1000;
+    private static StackFixedArray<Integer> bun = new StackFixedArray<Integer>(SHIPMENT_SIZE);
+    private static StackFixedArray<Integer> patty = new StackFixedArray<Integer>(SHIPMENT_SIZE);
+    private static StackFixedArray<Integer> lettuce = new StackFixedArray<Integer>(SHIPMENT_SIZE);
+    private static StackFixedArray<Integer> tomato = new StackFixedArray<Integer>(SHIPMENT_SIZE);
+    private static StackFixedArray<Integer> onion = new StackFixedArray<Integer>(SHIPMENT_SIZE);
+    private static StackFixedArray<Integer> cheese = new StackFixedArray<Integer>(SHIPMENT_SIZE);
     
     //initialize menu & counter
     private static ListFixedSize<StackFixedArray<Integer>> orderOne = new ListFixedSize<StackFixedArray<Integer>>(5); //bun patty lettuce tomato onion
@@ -44,6 +45,7 @@ public class Restaurant
     
     public static void main(String[] args)
     {
+        //add food stacks to menu item lists
         orderOne.add(bun); orderOne.add(patty); orderOne.add(lettuce); orderOne.add(tomato); orderOne.add(onion);
         orderTwo.add(cheese); orderTwo.add(bun); orderTwo.add(patty); orderTwo.add(lettuce); orderTwo.add(tomato); orderTwo.add(onion);
         orderThree.add(lettuce); orderThree.add(lettuce); orderThree.add(tomato); orderThree.add(onion);
@@ -55,13 +57,13 @@ public class Restaurant
         QueueFixedArray<Integer> customerQueue = new QueueFixedArray<Integer>(50); //initialize customer queue
         
         int daysUntilShipment = 0;
-        int lostCustomerDay, wasteCheese, wasteBun, wastePatty, wasteLettuce, wasteTomato, wasteOnion;
-        int countItemOne, countItemTwo, countItemThree, countItemFour, countItemFive, countItemSix;
+        int lostCustomerDay, wasteCheese, wasteBun, wastePatty, wasteLettuce, wasteTomato, wasteOnion; //initialize counters
+        int countItemOne, countItemTwo, countItemThree, countItemFour, countItemFive, countItemSix; //displayed at end ^
         
         int month = 12;
         for (int day=1; day<=31; day++) //store operates 12/1 to 12/31
         {
-            int today = month*100 + day;
+            int today = month*100 + day; //store date as int for simplification
             lostCustomerDay = wasteCheese = wasteBun = wastePatty = wasteLettuce = wasteTomato = wasteOnion = 0;
             countItemOne = countItemTwo = countItemThree = countItemFour = countItemFive = countItemSix = 0;
             dict.clear(); //reset info printed for each day
@@ -71,7 +73,7 @@ public class Restaurant
                 if (hour == 9 && daysUntilShipment == 0) //shipments arrive at 0900
                 {
                     System.out.println("Shipment today");
-                    int newShipment = 1000 - rng.nextInt(300); //shipment 700-1000 items total
+                    int newShipment = SHIPMENT_SIZE - rng.nextInt(3*(SHIPMENT_SIZE/10)); //generate between 3... and 10... items for shipment
                     for (int i=newShipment; i>0; i--)
                     {
                         int item = rng.nextInt(6); //choose random item and push it
@@ -155,7 +157,7 @@ public class Restaurant
                     MergeRecursive.sort(cheese.toArray(), 0, cheese.getSize()-1);
                     
                     
-                    while (!bun.isEmpty() && bun.peek() < today) //
+                    while (!bun.isEmpty() && bun.peek() < today) //pop expired items off stack - since sorted, will pop all off
                     {
                         bun.pop();
                         wasteBun++;
@@ -207,7 +209,7 @@ public class Restaurant
             {
                 Iterator keys = dict.getKeyIterator();
                 Iterator values = dict.getValueIterator();
-                while (keys.hasNext())
+                while (keys.hasNext()) //print all key-value pairs
                 {
                     System.out.printf("Customer %d → #%d%n", keys.next(), values.next());
                 }
