@@ -9,15 +9,18 @@
 public class StackLinkedData<T> implements StackInterface<T>
 {
     Node<T> top;
+    int numOfItems;
     
     public StackLinkedData()
     {
         top = null;
+        numOfItems = 0;
     }
     
     public StackLinkedData(Node<T> start)
     {
         top = start;
+        numOfItems = 1;
     }
     
     /**
@@ -29,6 +32,7 @@ public class StackLinkedData<T> implements StackInterface<T>
         Node<T> newNode = new Node<T>(newEntry, top);
         top = newNode;
         newNode = null;
+        numOfItems++;
     }
     
     /**
@@ -46,6 +50,7 @@ public class StackLinkedData<T> implements StackInterface<T>
         {
             Node<T> tempNode = top;
             top = tempNode.getNext();
+            numOfItems--;
             return tempNode.getData();
         }
     }
@@ -74,6 +79,15 @@ public class StackLinkedData<T> implements StackInterface<T>
     public boolean isEmpty()
     {
         return top == null;
+    }
+    
+    /**
+     * Returns the number of items in the stack.
+     * @return  The number of items in the stack.
+     */
+    public int getSize()
+    {
+        return numOfItems;
     }
     
     /**

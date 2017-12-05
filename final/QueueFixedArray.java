@@ -3,7 +3,7 @@
  * A fixed-size array implementation of the Queue data structure.
  * 
  * @author Daniel J. Norment
- * @version 1.1
+ * @version 1.2
  */
 public class QueueFixedArray<T> implements QueueInterface<T>
 {
@@ -33,7 +33,7 @@ public class QueueFixedArray<T> implements QueueInterface<T>
      */
     public void enqueue(T newEntry)
     {
-        back %= QUEUE_SIZE;
+        back %= queue.length;
         queue[back] = newEntry;
         numOfItems++;
         back++;
@@ -52,7 +52,7 @@ public class QueueFixedArray<T> implements QueueInterface<T>
         }
         else
         {
-            front %= QUEUE_SIZE;
+            front %= queue.length;
             T tempItem = queue[front];
             queue[front] = null;
             numOfItems--;
@@ -84,7 +84,7 @@ public class QueueFixedArray<T> implements QueueInterface<T>
      */
     public boolean isEmpty()
     {
-        return front == back;
+        return numOfItems == 0;
     }
     
     /**
@@ -101,7 +101,7 @@ public class QueueFixedArray<T> implements QueueInterface<T>
      */
     public void clear()
     {
-        for (int i=0; i<QUEUE_SIZE; i++)
+        for (int i=0; i<queue.length; i++)
         {
             queue[i] = null;
         }

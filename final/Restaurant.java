@@ -5,7 +5,7 @@ import java.util.Random;
  * Simulates an In-N-Out restaurant for the month of December.
  *
  * @author Daniel J. Norment
- * @version 1.1
+ * @version 1.2
  */
 public class Restaurant
 {
@@ -98,53 +98,49 @@ public class Restaurant
                     if (customers > 50)
                     {
                         lostCustomerDay += customers - 50; //lose all customers after 50
+                        customers = 50;
                     }
                     //loop through min(customers, 50) and take orders
-                    for (int i=0; i<Math.min(customers, 50); i++)
+                    for (int i=0; i<customers; i++)
                     {
-                        int customerNum = Integer.parseInt(String.format("%02d%02d", hour, i)); //concatenate hour and customer number (unique for dict each day)
+                        int customerNum = hour*100 + i; //concatenate hour and customer number (unique for dict each day)
                         customerQueue.enqueue(customerNum);
                     }
-                    for (int i=0; i<Math.min(customers, 50); i++)
+                    for (int i=0; i<customers; i++)
                     {
                         int order = rng.nextInt(6); //not +1 because used for array indices
                         boolean enoughIngredients = true; //assume enough until check
-                        
                         for (int j=0; j<menu(order).getLength(); j++) //for each ingredient in menu item
                         {
                             enoughIngredients = enoughIngredients && menu(order).view(j).getSize() > 1; //stays true if each food stack has more than 1 item
                         }
-                        //TODO only serving a handful of customers each hour
-                        if (!customerQueue.isEmpty())
+                        int customerNum = customerQueue.dequeue();
+                        if (enoughIngredients)
                         {
-                            int customerNum = customerQueue.dequeue();
-                            if (enoughIngredients)
+                            for (int j=0; j<menu(order).getLength(); j++) //pop off ingredients needed
                             {
-                                for (int j=0; j<menu(order).getLength(); j++) //pop off ingredients needed
-                                {
-                                    menu(order).view(j).pop();
-                                }
-                                switch (order)
-                                {
-                                    case 0: countItemOne++;
-                                        break;
-                                    case 1: countItemTwo++;
-                                        break;
-                                    case 2: countItemThree++;
-                                        break;
-                                    case 3: countItemFour++;
-                                        break;
-                                    case 4: countItemFive++;
-                                        break;
-                                    case 5: countItemSix++;
-                                        break;
-                                }
-                                dict.add(customerNum, order + 1); //add (customerNum, orderNum) to dict
-                            } 
-                            else
-                            {
-                                lostCustomerDay++;
+                                menu(order).view(j).pop();
                             }
+                            switch (order)
+                            {
+                                case 0: countItemOne++;
+                                    break;
+                                case 1: countItemTwo++;
+                                    break;
+                                case 2: countItemThree++;
+                                    break;
+                                case 3: countItemFour++;
+                                    break;
+                                case 4: countItemFive++;
+                                    break;
+                                case 5: countItemSix++;
+                                    break;
+                            }
+                            dict.add(customerNum, order + 1); //add (customerNum, orderNum) to dict
+                        } 
+                        else
+                        {
+                            lostCustomerDay++;
                         }
                     }
                 }
