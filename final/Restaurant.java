@@ -12,22 +12,23 @@ public class Restaurant
     private static Random rng = new Random();
     
     //intialize food stacks
-    private static StackLinkedData<Integer> bun = new StackLinkedData<Integer>();
-    private static StackLinkedData<Integer> patty = new StackLinkedData<Integer>();
-    private static StackLinkedData<Integer> lettuce = new StackLinkedData<Integer>();
-    private static StackLinkedData<Integer> tomato = new StackLinkedData<Integer>();
-    private static StackLinkedData<Integer> onion = new StackLinkedData<Integer>();
-    private static StackLinkedData<Integer> cheese = new StackLinkedData<Integer>();
+    private static final int STACK_SIZE = 300; //usually only reaches ~150 w/ 1000 item shipment
+    private static StackFixedArray<Integer> bun = new StackFixedArray<Integer>(STACK_SIZE);
+    private static StackFixedArray<Integer> patty = new StackFixedArray<Integer>(STACK_SIZE);
+    private static StackFixedArray<Integer> lettuce = new StackFixedArray<Integer>(STACK_SIZE);
+    private static StackFixedArray<Integer> tomato = new StackFixedArray<Integer>(STACK_SIZE);
+    private static StackFixedArray<Integer> onion = new StackFixedArray<Integer>(STACK_SIZE);
+    private static StackFixedArray<Integer> cheese = new StackFixedArray<Integer>(STACK_SIZE);
     
     //initialize menu & counter
-    private static ListFixedSize<StackLinkedData<Integer>> orderOne = new ListFixedSize<StackLinkedData<Integer>>(5); //bun patty lettuce tomato onion
-    private static ListFixedSize<StackLinkedData<Integer>> orderTwo = new ListFixedSize<StackLinkedData<Integer>>(6); //cheese bun patty lettuce tomato onion
-    private static ListFixedSize<StackLinkedData<Integer>> orderThree = new ListFixedSize<StackLinkedData<Integer>>(4); //lettuce lettuce tomato onion
-    private static ListFixedSize<StackLinkedData<Integer>> orderFour = new ListFixedSize<StackLinkedData<Integer>>(4); //bun patty lettuce tomato
-    private static ListFixedSize<StackLinkedData<Integer>> orderFive = new ListFixedSize<StackLinkedData<Integer>>(5); //cheese bun patty lettuce tomato
-    private static ListFixedSize<StackLinkedData<Integer>> orderSix = new ListFixedSize<StackLinkedData<Integer>>(4); //bun patty lettuce onion
+    private static ListFixedSize<StackFixedArray<Integer>> orderOne = new ListFixedSize<StackFixedArray<Integer>>(5); //bun patty lettuce tomato onion
+    private static ListFixedSize<StackFixedArray<Integer>> orderTwo = new ListFixedSize<StackFixedArray<Integer>>(6); //cheese bun patty lettuce tomato onion
+    private static ListFixedSize<StackFixedArray<Integer>> orderThree = new ListFixedSize<StackFixedArray<Integer>>(4); //lettuce lettuce tomato onion
+    private static ListFixedSize<StackFixedArray<Integer>> orderFour = new ListFixedSize<StackFixedArray<Integer>>(4); //bun patty lettuce tomato
+    private static ListFixedSize<StackFixedArray<Integer>> orderFive = new ListFixedSize<StackFixedArray<Integer>>(5); //cheese bun patty lettuce tomato
+    private static ListFixedSize<StackFixedArray<Integer>> orderSix = new ListFixedSize<StackFixedArray<Integer>>(4); //bun patty lettuce onion
     
-    public static ListFixedSize<StackLinkedData<Integer>> menu(int order)
+    public static ListFixedSize<StackFixedArray<Integer>> menu(int order)
     {
         switch(order)
         {
@@ -146,7 +147,14 @@ public class Restaurant
                 }
                 else if (hour == 21) //end of day 2100
                 {
-                    //sort food items by expiration day (any algorithm) TODO oldest items to top of stack
+                    MergeRecursive.sort(bun.toArray(), 0, bun.getSize()-1); //generic toArray() causes ClassCastException, shouldn't because Integer is passed as generic, so should return Integer array
+                    MergeRecursive.sort(lettuce.toArray(), 0, lettuce.getSize()-1);
+                    MergeRecursive.sort(patty.toArray(), 0, patty.getSize()-1);
+                    MergeRecursive.sort(tomato.toArray(), 0, tomato.getSize()-1);
+                    MergeRecursive.sort(onion.toArray(), 0, onion.getSize()-1);
+                    MergeRecursive.sort(cheese.toArray(), 0, cheese.getSize()-1);
+                    
+                    
                     while (!bun.isEmpty() && bun.peek() < today) //
                     {
                         bun.pop();
