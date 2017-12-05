@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -68,6 +69,7 @@ public class Restaurant
             {
                 if (hour == 9 && daysUntilShipment == 0) //shipments arrive at 0900
                 {
+                    System.out.println("Shipment today");
                     int newShipment = 1000 - rng.nextInt(300); //shipment 700-1000 items total
                     for (int i=newShipment; i>0; i--)
                     {
@@ -107,19 +109,22 @@ public class Restaurant
                     {
                         int order = rng.nextInt(6); //not +1 because used for array indices
                         boolean enoughIngredients = true; //assume enough until check
+                        
                         for (int j=0; j<menu(order).getLength(); j++) //for each ingredient in menu item
                         {
-                            if (order == 2 && lettuce.getSize() < 2) //menu #3 uses 2 lettuce TODO not sure if case covered
+                            if (order == 2 && lettuce.getSize() < 2) //menu #3 uses 2 lettuce
                             {
                                 enoughIngredients = false;
+                                System.out.println("#2 ordered, not enough lettuce");
                             }
                             else if (menu(order).view(j).getSize() < 1) //if less than 1 ingredient in food stack, there is not enough
                             {
                                 enoughIngredients = false;
+                                System.out.printf("#%d ordered, not enough of an ingredient%n", order);
                             }
                         }
                         
-                        if (enoughIngredients && !customerQueue.isEmpty())
+                        if (!customerQueue.isEmpty() && enoughIngredients)
                         {
                             for (int j=0; j<menu(order).getLength(); j++) //pop off ingredients needed
                             {
@@ -172,10 +177,15 @@ public class Restaurant
             System.out.printf("#6 ordered %d times%n", countItemSix);
             if (!dict.isEmpty())
             {
-                System.out.println("dict goes here");
-                //print, exit when no more - use iterator?
+                Iterator keys = dict.getKeyIterator();
+                Iterator values = dict.getValueIterator();
+                while (keys.hasNext())
+                {
+                    System.out.printf("Customer %d → #%d%n", keys.next(), values.next());
+                }
             }
-            System.out.println();
+
+            System.out.println("------------------------");
         }
     }
 }
