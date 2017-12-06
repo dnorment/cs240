@@ -156,33 +156,32 @@ public class Restaurant
                     MergeRecursive.sort(onion.toArray(), 0, onion.getSize()-1);
                     MergeRecursive.sort(cheese.toArray(), 0, cheese.getSize()-1);
                     
-                    
-                    while (!bun.isEmpty() && bun.peek() < today) //pop expired items off stack - since sorted, will pop all off
+                    while (!bun.isEmpty() && today - bun.peek() > 5) //pop expired items off stack - since sorted, will pop all off
                     {
                         bun.pop();
                         wasteBun++;
                     }
-                    while (!patty.isEmpty() && patty.peek() < today)
+                    while (!patty.isEmpty() && today - patty.peek() > 4)
                     {
                         patty.pop();
                         wastePatty++;
                     }
-                    while (!lettuce.isEmpty() && lettuce.peek() < today)
+                    while (!lettuce.isEmpty() && today - lettuce.peek() > 3)
                     {
                         lettuce.pop();
                         wasteLettuce++;
                     }
-                    while (!tomato.isEmpty() && tomato.peek() < today)
+                    while (!tomato.isEmpty() && today - tomato.peek() > 3)
                     {
                         tomato.pop();
                         wasteTomato++;
                     }
-                    while (!onion.isEmpty() && onion.peek() < today)
+                    while (!onion.isEmpty() && today - onion.peek() > 5)
                     {
                         onion.pop();
                         wasteOnion++;
                     }
-                    while (!cheese.isEmpty() && cheese.peek() < today)
+                    while (!cheese.isEmpty() && today - cheese.peek() > 2)
                     {
                         cheese.pop();
                         wasteCheese++;
